@@ -1,11 +1,9 @@
-group 'no.gradle.example'
+group 'group.common'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'idea'
-
-sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -18,5 +16,4 @@ uploadArchives {
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.3.11'
 }
