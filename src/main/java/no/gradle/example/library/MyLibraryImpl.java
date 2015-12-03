@@ -1,6 +1,6 @@
 package no.gradle.example.library;
 
-public class MyLibraryImpl implements MyLibrary{
+public class MyLibraryImpl{
 
     public int doSomeThingSmart() {
         return 2;
