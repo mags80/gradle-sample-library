@@ -31,6 +31,7 @@ configurations {
 
 dependencies {
     compile 'com.google.guava:guava:19.0'
+    compile 'joda-time:joda-time:2.9.1'
     jaxws 'com.sun.xml.ws:jaxws-tools:2.2.10'
 }
 
