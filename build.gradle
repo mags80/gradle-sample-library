@@ -7,6 +7,7 @@ apply plugin: 'idea'
 apply plugin: 'maven-publish'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -24,8 +25,48 @@ uploadArchives {
     }
 }
 
-dependencies {
-
-    compile 'com.google.guava:guava:19.0'
-
+configurations {
+    jaxws
 }
+
+dependencies {
+    compile 'com.google.guava:guava:19.0'
+    jaxws 'com.sun.xml.ws:jaxws-tools:2.2.10'
+}
+
+def destDir = file("$buildDir/generated")
+
+sourceSets{
+    main {
+        java { srcDirs( destDir, 'src/main/java') }
+    }
+}
+
+idea {
+    module {
+        excludeDirs -= file("$buildDir")
+        generatedSourceDirs += destDir
+    }
+}
+
+task wsimport  {
+    def wsdlSrc = file('sample.wsdl')
+    inputs.file wsdlSrc
+    outputs.dir destDir
+    doLast{
+        ant {
+            sourceSets.main.output.classesDir.mkdirs()
+            destDir.mkdirs()
+            taskdef(name:'wsimport',
+                    classname:'com.sun.tools.ws.ant.WsImport',
+                    classpath:configurations.jaxws.asPath)
+            wsimport(keep:true,
+                    destdir: sourceSets.main.output.classesDir,
+                    sourcedestdir: destDir,
+                    wsdl: wsdlSrc)
+        }
+    }
+}
+compileJava.dependsOn(wsimport)
+
+
